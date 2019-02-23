@@ -1,0 +1,38 @@
+gcloud auth list
+Credentialed accounts:
+ - <myaccount>@<mydomain>.com (active)
+ gcloud config list project
+ [core]
+project = <project_ID>
+
+export API_KEY=<YOUR_API_KEY>
+
+touch request.json
+vim request.json
+
+{
+  "config": {
+      "encoding":"FLAC",
+      "sample_rate": 16000,
+      "language_code": "en-US"
+  },
+  "audio": {
+      "uri":"gs://cloud-samples-tests/speech/brooklyn.flac"
+  }
+}
+
+curl -s -X POST -H "Content-Type: application/json" --data-binary @request.json \
+"https://speech.googleapis.com/v1beta1/speech:syncrecognize?key=${API_KEY}"         //Call the Speech API
+
+{
+  "results": [
+    {
+      "alternatives": [
+        {
+          "transcript": "how old is the Brooklyn Bridge",
+          "confidence": 0.98267895
+        }
+      ]
+    }
+  ]
+}
